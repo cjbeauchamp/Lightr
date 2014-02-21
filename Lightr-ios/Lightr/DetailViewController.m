@@ -8,6 +8,7 @@
 
 #import "DetailViewController.h"
 
+#import "ColorPickerViewController.h"
 #import "MasterViewController.h"
 #import "TVIcon.h"
 #import "AppDelegate.h"
@@ -16,6 +17,7 @@
 @interface DetailViewController () {
     NSMutableArray *_log; // TODO: max cap log
     NSInteger _selectingIndex;
+    UIPopoverController *_colorPopover;
 }
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 - (void) configureView;
@@ -63,8 +65,44 @@
     }
 }
 
+- (NSString*)createRandomHex
+{
+    NSString *chars = @"0123456789ABCDEF";
+    NSMutableString *retString = [NSMutableString stringWithString:@""];
+    for(int i=0; i<6; i++) {
+        int loc = arc4random() % chars.length;
+        [retString appendString:[chars substringWithRange:NSMakeRange(loc, 1)]];
+    }
+    return [NSString stringWithString:retString];
+}
+
+- (void) sendCommand:(NSString*)command
+{
+    
+    NSMutableString *colors = [NSMutableString stringWithString:@""];
+    
+    for(int i=0; i<30*4; i++) {
+        [colors appendString:[self createRandomHex]];
+    }
+    
+    NSString *urlString = [NSString stringWithFormat:@"http://arduino.local/arduino/c/%@/p/%@/",command,colors];
+    
+    [self addLog:[NSString stringWithFormat:@"Making request: %@", urlString]];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+    [request setTimeoutInterval:30];
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                               [self addLog:[NSString stringWithFormat:@"Request complete => %@ => %@", connectionError, response]];
+                               [self addLog:[NSString stringWithFormat:@"DATA => %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]]];
+                           }];
+}
+
 - (IBAction) saveToFavorites:(id)sender
 {
+    [self sendCommand:@"blink"];
+    
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Add Name"
                                                  message:@"Add a name to your favorite"
                                                 delegate:self
@@ -77,6 +115,8 @@
 
 - (IBAction) apply:(id)sender
 {
+    [self sendCommand:@"blink_fast"];
+
     //switch to the recent tab
     [[AppDelegate shared].masterViewController.segment setSelectedSegmentIndex:1];
     [[AppDelegate shared].masterViewController segmentChanged:self];
@@ -207,6 +247,8 @@
     }
     
     [_logView setContentOffset:CGPointMake(0, offsetY) animated:TRUE];
+    
+    NSLog(@"msg => %@", msg);
 }
 
 #pragma mark - Managing the detail item
@@ -277,9 +319,20 @@
     
     if(_selectingIndex > -1) {
         
-        // fake our color picker
-        // TODO: impl popover
-        [_previewTV replaceColorAtIndex:_selectingIndex withColor:[UIColor purpleColor]];
+        CGPoint superPoint = [self.view convertPoint:pt fromView:_previewTV];
+        
+        CGRect f = CGRectMake(superPoint.x, superPoint.y, 0, 0);
+        
+        UIStoryboard *story = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        ColorPickerViewController *vc = [story instantiateViewControllerWithIdentifier:@"ColorPicker"];
+        
+        _colorPopover = [[UIPopoverController alloc] initWithContentViewController:vc];
+        [_colorPopover presentPopoverFromRect:f
+                                 inView:self.view
+               permittedArrowDirections:UIPopoverArrowDirectionRight
+                               animated:YES];
+        
+//        [_previewTV replaceColorAtIndex:_selectingIndex withColor:[UIColor purpleColor]];
     }
 }
 
