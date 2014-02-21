@@ -15,6 +15,8 @@
 #import "Configuration.h"
 #import "UIColor+RGBValues.h"
 
+#import "KTLoader.h"
+
 #define START_LIGHT         0
 #define BOTTOM_LEFT_INDEX   30
 #define TOP_LEFT_INDEX      50
@@ -90,6 +92,7 @@
 
 - (void) sendCommand:(NSString*)command
 {
+    [KTLoader showLoader:@"Sending configuration. Chill out!"];
     
     NSMutableString *colors = [NSMutableString stringWithString:@""];
 
@@ -115,6 +118,19 @@
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
                                [self addLog:[NSString stringWithFormat:@"Request complete => %@ => %@", connectionError, response]];
                                [self addLog:[NSString stringWithFormat:@"DATA => %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]]];
+                               
+                               if(connectionError == nil) {
+                                   [KTLoader showLoader:@"All Done!"
+                                               animated:TRUE
+                                          withIndicator:KTLoaderIndicatorSuccess
+                                        andHideInterval:KTLoaderDurationAuto];
+                               } else {
+                                   [KTLoader showLoader:@"Something broke! Tell Chris!"
+                                               animated:TRUE
+                                          withIndicator:KTLoaderIndicatorError
+                                        andHideInterval:KTLoaderDurationAuto];
+                               }
+                               
                            }];
 }
 

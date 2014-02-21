@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CA14539B18B7D89A0049A1BC /* failure-indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = CA14539518B7D89A0049A1BC /* failure-indicator.png */; };
+		CA14539C18B7D89A0049A1BC /* failure-indicator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CA14539618B7D89A0049A1BC /* failure-indicator@2x.png */; };
+		CA14539D18B7D89A0049A1BC /* success-indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = CA14539718B7D89A0049A1BC /* success-indicator.png */; };
+		CA14539E18B7D89A0049A1BC /* success-indicator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CA14539818B7D89A0049A1BC /* success-indicator@2x.png */; };
+		CA14539F18B7D89A0049A1BC /* KTLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = CA14539A18B7D89A0049A1BC /* KTLoader.m */; };
+		CA1453A318B7D8AE0049A1BC /* KTCircularProgressIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = CA1453A218B7D8AE0049A1BC /* KTCircularProgressIndicator.m */; };
+		CA1453A718B7D8BD0049A1BC /* UIView+KTUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = CA1453A618B7D8BD0049A1BC /* UIView+KTUtilities.m */; };
 		CA17A2D318B6FE7800E68DA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA17A2D118B6FE7800E68DA7 /* Main.storyboard */; };
 		CA30BC2918ADD69D002A831C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA30BC2818ADD69D002A831C /* Foundation.framework */; };
 		CA30BC2B18ADD69D002A831C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA30BC2A18ADD69D002A831C /* CoreGraphics.framework */; };
@@ -59,6 +66,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CA14539518B7D89A0049A1BC /* failure-indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "failure-indicator.png"; sourceTree = "<group>"; };
+		CA14539618B7D89A0049A1BC /* failure-indicator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "failure-indicator@2x.png"; sourceTree = "<group>"; };
+		CA14539718B7D89A0049A1BC /* success-indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "success-indicator.png"; sourceTree = "<group>"; };
+		CA14539818B7D89A0049A1BC /* success-indicator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "success-indicator@2x.png"; sourceTree = "<group>"; };
+		CA14539918B7D89A0049A1BC /* KTLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTLoader.h; sourceTree = "<group>"; };
+		CA14539A18B7D89A0049A1BC /* KTLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTLoader.m; sourceTree = "<group>"; };
+		CA1453A118B7D8AE0049A1BC /* KTCircularProgressIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTCircularProgressIndicator.h; sourceTree = "<group>"; };
+		CA1453A218B7D8AE0049A1BC /* KTCircularProgressIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTCircularProgressIndicator.m; sourceTree = "<group>"; };
+		CA1453A518B7D8BD0049A1BC /* UIView+KTUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+KTUtilities.h"; sourceTree = "<group>"; };
+		CA1453A618B7D8BD0049A1BC /* UIView+KTUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+KTUtilities.m"; sourceTree = "<group>"; };
 		CA17A2D218B6FE7800E68DA7 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CA30BC2518ADD69D002A831C /* Lightr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lightr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA30BC2818ADD69D002A831C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -143,6 +160,46 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CA14539318B7D89A0049A1BC /* KTLoader */ = {
+			isa = PBXGroup;
+			children = (
+				CA1453A418B7D8BD0049A1BC /* UIView */,
+				CA14539418B7D89A0049A1BC /* images */,
+				CA14539918B7D89A0049A1BC /* KTLoader.h */,
+				CA14539A18B7D89A0049A1BC /* KTLoader.m */,
+			);
+			path = KTLoader;
+			sourceTree = "<group>";
+		};
+		CA14539418B7D89A0049A1BC /* images */ = {
+			isa = PBXGroup;
+			children = (
+				CA14539518B7D89A0049A1BC /* failure-indicator.png */,
+				CA14539618B7D89A0049A1BC /* failure-indicator@2x.png */,
+				CA14539718B7D89A0049A1BC /* success-indicator.png */,
+				CA14539818B7D89A0049A1BC /* success-indicator@2x.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		CA1453A018B7D8AE0049A1BC /* KTCircularProgressIndicator */ = {
+			isa = PBXGroup;
+			children = (
+				CA1453A118B7D8AE0049A1BC /* KTCircularProgressIndicator.h */,
+				CA1453A218B7D8AE0049A1BC /* KTCircularProgressIndicator.m */,
+			);
+			path = KTCircularProgressIndicator;
+			sourceTree = "<group>";
+		};
+		CA1453A418B7D8BD0049A1BC /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				CA1453A518B7D8BD0049A1BC /* UIView+KTUtilities.h */,
+				CA1453A618B7D8BD0049A1BC /* UIView+KTUtilities.m */,
+			);
+			path = UIView;
+			sourceTree = "<group>";
+		};
 		CA30BC1C18ADD69D002A831C = {
 			isa = PBXGroup;
 			children = (
@@ -178,6 +235,8 @@
 		CA30BC2E18ADD69D002A831C /* Lightr */ = {
 			isa = PBXGroup;
 			children = (
+				CA1453A018B7D8AE0049A1BC /* KTCircularProgressIndicator */,
+				CA14539318B7D89A0049A1BC /* KTLoader */,
 				CA79508318B7269C0094682A /* UIColor+RGBValues.h */,
 				CA79508418B7269C0094682A /* UIColor+RGBValues.m */,
 				CA79506318B717C20094682A /* ColorPicker */,
@@ -350,9 +409,13 @@
 				CA30BC3318ADD69D002A831C /* InfoPlist.strings in Resources */,
 				CA79508118B717D20094682A /* NEOColorPickerViewController.xib in Resources */,
 				CA79508718B73A880094682A /* whole.config in Resources */,
+				CA14539B18B7D89A0049A1BC /* failure-indicator.png in Resources */,
+				CA14539D18B7D89A0049A1BC /* success-indicator.png in Resources */,
 				CA79507718B717D20094682A /* colorPicker.bundle in Resources */,
 				CA79508B18B7585D0094682A /* split-vert.config in Resources */,
+				CA14539E18B7D89A0049A1BC /* success-indicator@2x.png in Resources */,
 				CA79509118B75CF70094682A /* quadrants.config in Resources */,
+				CA14539C18B7D89A0049A1BC /* failure-indicator@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,13 +434,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA1453A718B7D8BD0049A1BC /* UIView+KTUtilities.m in Sources */,
 				CA5C0BD918B3E4CA0066AB18 /* Configuration.m in Sources */,
 				CA79508518B7269C0094682A /* UIColor+RGBValues.m in Sources */,
+				CA1453A318B7D8AE0049A1BC /* KTCircularProgressIndicator.m in Sources */,
 				CA30BC3918ADD69D002A831C /* AppDelegate.m in Sources */,
 				CA79507E18B717D20094682A /* NEOColorPickerHueGridViewController.m in Sources */,
 				CA30BC3F18ADD69D002A831C /* MasterViewController.m in Sources */,
 				CA4F2E5318ADDF610047BDA2 /* TVIcon.m in Sources */,
 				CA79508218B717D20094682A /* UIColor+NEOColor.m in Sources */,
+				CA14539F18B7D89A0049A1BC /* KTLoader.m in Sources */,
 				CA30BC3518ADD69D002A831C /* main.m in Sources */,
 				CA79508018B717D20094682A /* NEOColorPickerViewController.m in Sources */,
 				CA5C0BD418B3E0D20066AB18 /* Lightr.xcdatamodel in Sources */,
