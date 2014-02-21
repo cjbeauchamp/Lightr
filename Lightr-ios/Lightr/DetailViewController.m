@@ -13,6 +13,13 @@
 #import "TVIcon.h"
 #import "AppDelegate.h"
 #import "Configuration.h"
+#import "UIColor+RGBValues.h"
+
+#define START_LIGHT         0
+#define BOTTOM_LEFT_INDEX   30
+#define TOP_LEFT_INDEX      50
+#define TOP_RIGHT_INDEX     80
+#define BOTTOM_RIGHT_INDEX  100
 
 @interface DetailViewController () {
     NSMutableArray *_log; // TODO: max cap log
@@ -74,6 +81,11 @@
         [retString appendString:[chars substringWithRange:NSMakeRange(loc, 1)]];
     }
     return [NSString stringWithString:retString];
+}
+
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    return (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 - (void) sendCommand:(NSString*)command
@@ -319,21 +331,40 @@
     
     if(_selectingIndex > -1) {
         
+        UIColor *curColor = [[_previewTV colors] objectAtIndex:_selectingIndex];
+        
         CGPoint superPoint = [self.view convertPoint:pt fromView:_previewTV];
         
         CGRect f = CGRectMake(superPoint.x, superPoint.y, 0, 0);
         
-        UIStoryboard *story = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        ColorPickerViewController *vc = [story instantiateViewControllerWithIdentifier:@"ColorPicker"];
+        NEOColorPickerViewController *controller = [[NEOColorPickerViewController alloc] init];
+        controller.delegate = self;
+        controller.selectedColor = curColor;
         
-        _colorPopover = [[UIPopoverController alloc] initWithContentViewController:vc];
+        UINavigationController* navVC = [[UINavigationController alloc] initWithRootViewController:controller];
+
+        _colorPopover = [[UIPopoverController alloc] initWithContentViewController:navVC];
         [_colorPopover presentPopoverFromRect:f
-                                 inView:self.view
-               permittedArrowDirections:UIPopoverArrowDirectionRight
-                               animated:YES];
-        
-//        [_previewTV replaceColorAtIndex:_selectingIndex withColor:[UIColor purpleColor]];
+                                       inView:self.view
+                     permittedArrowDirections:UIPopoverArrowDirectionRight
+                                     animated:YES];
+
     }
+}
+
+- (void) colorPickerViewController:(NEOColorPickerBaseViewController *)controller didSelectColor:(UIColor *)color {
+    // Do something with the color.
+    
+    [self addLog:[NSString stringWithFormat:@"Updated color at index %d => %@", _selectingIndex, [color prettyPrint]]];
+    
+    [_previewTV replaceColorAtIndex:_selectingIndex withColor:color];
+    
+    [_colorPopover dismissPopoverAnimated:TRUE];
+}
+
+- (void) colorPickerViewControllerDidCancel:(NEOColorPickerBaseViewController *)controller
+{
+    [_colorPopover dismissPopoverAnimated:TRUE];
 }
 
 - (void)viewDidLoad
@@ -354,7 +385,6 @@
     [self.view addSubview:_previewTV];
     
     [_previewTV addGestureRecognizer:tap];
-
 }
 
 - (void)didReceiveMemoryWarning

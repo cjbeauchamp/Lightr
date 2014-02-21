@@ -10,11 +10,14 @@
 
 #import <MessageUI/MessageUI.h>
 
+#import "NEOColorPickerViewController.h"
+
 @class TVIcon;
 
 @interface DetailViewController : UIViewController
 <UISplitViewControllerDelegate,
 MFMailComposeViewControllerDelegate,
+NEOColorPickerViewControllerDelegate,
 UIAlertViewDelegate>
 
 @property (strong, nonatomic) id detailItem;
