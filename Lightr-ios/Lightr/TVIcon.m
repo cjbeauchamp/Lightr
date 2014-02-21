@@ -12,7 +12,9 @@
 #define HORIZ_BLOCK_COUNT   30.f
 #define VERT_BLOCK_COUNT    19.f
 
-@interface TVIcon()
+@interface TVIcon() {
+    NSDictionary *_configDict;
+}
 
 - (void) reconfigure;
 + (NSDictionary*) configDict;
@@ -21,68 +23,72 @@
 
 @implementation TVIcon
 
+static NSDictionary *sharedConfigDict = nil;
+
 + (NSDictionary*) configDict
 {    
-    NSMutableDictionary *configDict = [NSMutableDictionary dictionary];
-
-    int configIndex = TVConfigurationWhole;
-    
-    NSArray *configFiles = @[
-                             @"whole.config",
-                             @"split-horiz.config",
-                             @"split-vert.config",
-                             @"split-horiz-thirds.config",
-                             @"split-vert-thirds.config",
-                             @"quadrants.config"
-                             ];
-    for(NSString *file in configFiles) {
+    if(sharedConfigDict == nil) {
         
-        NSString *fileString = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:file];
-
-//        NSLog(@"File => %@", fileString);
-
-        NSData *fileData = [NSData dataWithContentsOfFile:fileString];
-        NSString *configString = [[NSString alloc] initWithData:fileData encoding:NSUTF8StringEncoding];
+        NSMutableDictionary *mutableConfig = [NSMutableDictionary dictionary];
         
-//        NSLog(@"REading configString : %@", configString);
+        int configIndex = TVConfigurationWhole;
         
-        // read the string from top left to right for now
-        
-        NSMutableString *finalString = [NSMutableString stringWithString:@""];
-
-        NSArray *comp = [configString componentsSeparatedByString:@"\n"];
-
-        // read the bottom line (backwards)
-        NSMutableString *reversed = [NSMutableString stringWithString:@""];
-        for(int i = ((NSString*)[comp lastObject]).length-1; i>=0; i--) {
-            [reversed appendString:[[comp lastObject] substringWithRange:NSMakeRange(i, 1)]];
+        NSArray *configFiles = @[
+                                 @"whole.config",
+                                 @"split-horiz.config",
+                                 @"split-vert.config",
+                                 @"split-horiz-thirds.config",
+                                 @"split-vert-thirds.config",
+                                 @"quadrants.config"
+                                 ];
+        for(NSString *file in configFiles) {
+            
+            NSString *fileString = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:file];
+            
+            //        NSLog(@"File => %@", fileString);
+            
+            NSData *fileData = [NSData dataWithContentsOfFile:fileString];
+            NSString *configString = [[NSString alloc] initWithData:fileData encoding:NSUTF8StringEncoding];
+            
+            //        NSLog(@"REading configString : %@", configString);
+            
+            // read the string from top left to right for now
+            
+            NSMutableString *finalString = [NSMutableString stringWithString:@""];
+            
+            NSArray *comp = [configString componentsSeparatedByString:@"\n"];
+            
+            // read the bottom line (backwards)
+            NSMutableString *reversed = [NSMutableString stringWithString:@""];
+            for(int i = ((NSString*)[comp lastObject]).length-1; i>=0; i--) {
+                [reversed appendString:[[comp lastObject] substringWithRange:NSMakeRange(i, 1)]];
+            }
+            [finalString appendString:reversed];
+            
+            // read the left column (bottom to top)
+            for(int i=comp.count-2; i>=0; i--) {
+                NSString *line = [comp objectAtIndex:i];
+                [finalString appendString:[line substringToIndex:1]];
+            }
+            
+            // read the top line
+            [finalString appendString:[[comp objectAtIndex:0] substringFromIndex:1]];
+            
+            // read the right column
+            for(int i=1; i<comp.count-1; i++) {
+                NSString *line = [comp objectAtIndex:i];
+                [finalString appendString:[line substringFromIndex:line.length-1]];
+            }
+            
+            [mutableConfig setObject:finalString forKey:[NSNumber numberWithInt:configIndex]];
+            
+            ++configIndex;
         }
-        [finalString appendString:reversed];
         
-        // read the left column (bottom to top)
-        for(int i=comp.count-2; i>=0; i--) {
-            NSString *line = [comp objectAtIndex:i];
-            [finalString appendString:[line substringToIndex:1]];
-        }
-
-        // read the top line
-        [finalString appendString:[[comp objectAtIndex:0] substringFromIndex:1]];
-        
-        // read the right column
-        for(int i=1; i<comp.count-1; i++) {
-            NSString *line = [comp objectAtIndex:i];
-            [finalString appendString:[line substringFromIndex:line.length-1]];
-        }
-
-        [configDict setObject:finalString forKey:[NSNumber numberWithInt:configIndex]];
-        
-        ++configIndex;
+        sharedConfigDict = [NSDictionary dictionaryWithDictionary:mutableConfig];
     }
-
-//    NSLog(@"Configdict => %@", configDict);
-
     
-    return [NSDictionary dictionaryWithDictionary:configDict];
+    return sharedConfigDict;
 }
 
 + (TVIcon*) iconWithWidth:(CGFloat)width
@@ -185,8 +191,8 @@
         NSString *str = [[TVIcon configDict] objectForKey:[NSNumber numberWithInt:_configuration]];
         NSString *sstring = [str substringWithRange:NSMakeRange(v.tag, 1)];
         NSUInteger singleValue = sstring.integerValue;
-        NSLog(@"SingleValue: %d", singleValue);
-        NSLog(@"Colors: %@", _colors);
+//        NSLog(@"SingleValue: %d", singleValue);
+//        NSLog(@"Colors: %@", _colors);
         v.backgroundColor = [_colors objectAtIndex:singleValue];
     }
 
