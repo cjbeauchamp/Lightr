@@ -92,7 +92,7 @@
 
 - (void) sendCommand:(NSString*)command
 {
-    [KTLoader showLoader:@"Sending configuration. Chill out!"];
+    [KTLoader showLoader:@"Working hard. Chill out dude"];
     
     NSMutableString *colors = [NSMutableString stringWithString:@""];
 
