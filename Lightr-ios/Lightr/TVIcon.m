@@ -9,8 +9,8 @@
 #import "TVIcon.h"
 
 #define ASPECT_RATIO        3/4
-#define HORIZ_BLOCK_COUNT   16.f
-#define VERT_BLOCK_COUNT    8.f
+#define HORIZ_BLOCK_COUNT   30.f
+#define VERT_BLOCK_COUNT    19.f
 
 @interface TVIcon()
 
@@ -22,21 +22,66 @@
 @implementation TVIcon
 
 + (NSDictionary*) configDict
-{
+{    
     NSMutableDictionary *configDict = [NSMutableDictionary dictionary];
-    [configDict setObject:@"00000000000000000000000000000000000000000000"
-                   forKey:[NSNumber numberWithInt:TVConfigurationWhole]];
-    [configDict setObject:@"00000000111111111111111111111100000000000000"
-                   forKey:[NSNumber numberWithInt:TVConfigurationSplitHorizontal]];
-    [configDict setObject:@"00000000000000000001111111111111111111111000"
-                   forKey:[NSNumber numberWithInt:TVConfigurationSplitVertical]];
-    [configDict setObject:@"00000111111222222222222222211111100000000000"
-                   forKey:[NSNumber numberWithInt:TVConfigurationSplitHorizontalThirds]];
-    [configDict setObject:@"00000000000000000111122222222222222222211110"
-                   forKey:[NSNumber numberWithInt:TVConfigurationSplitVerticalThirds]];
-    [configDict setObject:@"00000000111111111112222222222233333333333000"
-                   forKey:[NSNumber numberWithInt:TVConfigurationSplitQuadrants]];
 
+    int configIndex = TVConfigurationWhole;
+    
+    NSArray *configFiles = @[
+                             @"whole.config",
+                             @"split-horiz.config",
+                             @"split-vert.config",
+                             @"split-horiz-thirds.config",
+                             @"split-vert-thirds.config",
+                             @"quadrants.config"
+                             ];
+    for(NSString *file in configFiles) {
+        
+        NSString *fileString = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:file];
+
+//        NSLog(@"File => %@", fileString);
+
+        NSData *fileData = [NSData dataWithContentsOfFile:fileString];
+        NSString *configString = [[NSString alloc] initWithData:fileData encoding:NSUTF8StringEncoding];
+        
+//        NSLog(@"REading configString : %@", configString);
+        
+        // read the string from top left to right for now
+        
+        NSMutableString *finalString = [NSMutableString stringWithString:@""];
+
+        NSArray *comp = [configString componentsSeparatedByString:@"\n"];
+
+        // read the bottom line (backwards)
+        NSMutableString *reversed = [NSMutableString stringWithString:@""];
+        for(int i = ((NSString*)[comp lastObject]).length-1; i>=0; i--) {
+            [reversed appendString:[[comp lastObject] substringWithRange:NSMakeRange(i, 1)]];
+        }
+        [finalString appendString:reversed];
+        
+        // read the left column (bottom to top)
+        for(int i=comp.count-2; i>=0; i--) {
+            NSString *line = [comp objectAtIndex:i];
+            [finalString appendString:[line substringToIndex:1]];
+        }
+
+        // read the top line
+        [finalString appendString:[[comp objectAtIndex:0] substringFromIndex:1]];
+        
+        // read the right column
+        for(int i=1; i<comp.count-1; i++) {
+            NSString *line = [comp objectAtIndex:i];
+            [finalString appendString:[line substringFromIndex:line.length-1]];
+        }
+
+        [configDict setObject:finalString forKey:[NSNumber numberWithInt:configIndex]];
+        
+        ++configIndex;
+    }
+
+//    NSLog(@"Configdict => %@", configDict);
+
+    
     return [NSDictionary dictionaryWithDictionary:configDict];
 }
 
@@ -56,6 +101,8 @@
     
     UIView *v = [self hitTest:pt withEvent:nil];
     
+    NSLog(@"Clicked v=> %@", v);
+    
     if(![v isKindOfClass:[TVIcon class]]) {
         
         NSInteger tag = v.tag;
@@ -64,7 +111,6 @@
         
         ndx = item.integerValue;
     }
-    
     
     return ndx;
 }
@@ -98,28 +144,40 @@
     CGFloat blockWidth = roundf(self.frame.size.width / HORIZ_BLOCK_COUNT);
     CGFloat blockHeight = roundf(self.frame.size.width * ASPECT_RATIO / VERT_BLOCK_COUNT);
     
-    for(int i=0; i<HORIZ_BLOCK_COUNT; i++) {
-        UIView *topBlock = [[UIView alloc] initWithFrame:CGRectMake(i*blockWidth, 0, blockWidth, blockHeight)];
-        topBlock.backgroundColor = [UIColor blackColor];
-        topBlock.tag = i;
-        [self addSubview:topBlock];
-        
-        UIView *bottomBlock = [[UIView alloc] initWithFrame:CGRectMake(i*blockWidth, self.frame.size.height-blockHeight, blockWidth, blockHeight)];
-        bottomBlock.backgroundColor = [UIColor blackColor];
-        bottomBlock.tag = HORIZ_BLOCK_COUNT + VERT_BLOCK_COUNT - 2 + (HORIZ_BLOCK_COUNT - i) - 1;
-        [self addSubview:bottomBlock];
-    }
+    NSString *configString = [[TVIcon configDict] objectForKey:[NSNumber numberWithInt:_configuration]];
     
-    for(int i=1; i<VERT_BLOCK_COUNT-1; i++) {
-        UIView *leftBlock = [[UIView alloc] initWithFrame:CGRectMake(0, i*blockHeight, blockWidth, blockHeight)];
-        leftBlock.backgroundColor = [UIColor redColor];
-        leftBlock.tag = HORIZ_BLOCK_COUNT * 2 + (VERT_BLOCK_COUNT - 2) + VERT_BLOCK_COUNT - i - 2;
-        [self addSubview:leftBlock];
+    for(int i=0; i<configString.length; i++) {
         
-        UIView *rightBlock = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width-blockWidth, i*blockHeight, blockWidth, blockHeight)];
-        rightBlock.tag = i + HORIZ_BLOCK_COUNT - 1;
-        rightBlock.backgroundColor = [UIColor redColor];
-        [self addSubview:rightBlock];
+        // start in the bottom-right
+        CGFloat x = 0;
+        if(i < HORIZ_BLOCK_COUNT) {
+            x = self.frame.size.width - blockWidth * (i+1);
+        } else if(i < HORIZ_BLOCK_COUNT+VERT_BLOCK_COUNT-1) {
+            x = 0;
+        } else if(i < HORIZ_BLOCK_COUNT*2 + VERT_BLOCK_COUNT-2) {
+            x = (i - (HORIZ_BLOCK_COUNT + VERT_BLOCK_COUNT - 2)) * blockWidth;
+        } else {
+            x = self.frame.size.width - blockWidth;
+        }
+        
+        CGFloat y = 0;
+        if(i < HORIZ_BLOCK_COUNT) {
+            y = self.frame.size.height - blockHeight;
+        } else if(i < HORIZ_BLOCK_COUNT+VERT_BLOCK_COUNT-1) {
+            y = self.frame.size.height - blockHeight * (i - HORIZ_BLOCK_COUNT + 2);
+        } else if(i < HORIZ_BLOCK_COUNT*2 + VERT_BLOCK_COUNT-2) {
+            y = 0;
+        } else {
+            y = blockHeight * (i - (VERT_BLOCK_COUNT - 3 + HORIZ_BLOCK_COUNT*2));
+        }
+
+        UILabel *block = [[UILabel alloc] initWithFrame:CGRectMake(x, y, blockWidth, blockHeight)];
+        block.backgroundColor = [UIColor blackColor];
+        block.tag = i;
+        block.userInteractionEnabled = TRUE;
+        block.font = [UIFont systemFontOfSize:8];
+//        block.text = [NSString stringWithFormat:@"%d", i];
+        [self addSubview:block];
     }
     
     // use the associated configuration
@@ -127,6 +185,8 @@
         NSString *str = [[TVIcon configDict] objectForKey:[NSNumber numberWithInt:_configuration]];
         NSString *sstring = [str substringWithRange:NSMakeRange(v.tag, 1)];
         NSUInteger singleValue = sstring.integerValue;
+        NSLog(@"SingleValue: %d", singleValue);
+        NSLog(@"Colors: %@", _colors);
         v.backgroundColor = [_colors objectAtIndex:singleValue];
     }
 

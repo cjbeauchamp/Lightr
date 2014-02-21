@@ -92,9 +92,16 @@
 {
     
     NSMutableString *colors = [NSMutableString stringWithString:@""];
-    
-    for(int i=0; i<30*4; i++) {
-        [colors appendString:[self createRandomHex]];
+
+    int found = 0;
+    while(found < _previewTV.subviews.count) {
+        for(UIView *v in _previewTV.subviews) {
+            if(v.tag == found) {
+                [colors appendString:[v.backgroundColor hexValue]];
+                ++found;
+                break;
+            }
+        }
     }
     
     NSString *urlString = [NSString stringWithFormat:@"http://arduino.local/arduino/c/%@/p/%@/",command,colors];

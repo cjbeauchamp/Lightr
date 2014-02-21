@@ -39,6 +39,12 @@
 		CA79508118B717D20094682A /* NEOColorPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CA79507418B717D20094682A /* NEOColorPickerViewController.xib */; };
 		CA79508218B717D20094682A /* UIColor+NEOColor.m in Sources */ = {isa = PBXBuildFile; fileRef = CA79507618B717D20094682A /* UIColor+NEOColor.m */; };
 		CA79508518B7269C0094682A /* UIColor+RGBValues.m in Sources */ = {isa = PBXBuildFile; fileRef = CA79508418B7269C0094682A /* UIColor+RGBValues.m */; };
+		CA79508718B73A880094682A /* whole.config in Resources */ = {isa = PBXBuildFile; fileRef = CA79508618B73A880094682A /* whole.config */; };
+		CA79508918B742440094682A /* split-horiz.config in Resources */ = {isa = PBXBuildFile; fileRef = CA79508818B742440094682A /* split-horiz.config */; };
+		CA79508B18B7585D0094682A /* split-vert.config in Resources */ = {isa = PBXBuildFile; fileRef = CA79508A18B7585D0094682A /* split-vert.config */; };
+		CA79508D18B75BAB0094682A /* split-horiz-thirds.config in Resources */ = {isa = PBXBuildFile; fileRef = CA79508C18B75BAB0094682A /* split-horiz-thirds.config */; };
+		CA79508F18B75C9E0094682A /* split-vert-thirds.config in Resources */ = {isa = PBXBuildFile; fileRef = CA79508E18B75C9E0094682A /* split-vert-thirds.config */; };
+		CA79509118B75CF70094682A /* quadrants.config in Resources */ = {isa = PBXBuildFile; fileRef = CA79509018B75CF70094682A /* quadrants.config */; };
 		CAEE564218B4934E000667F2 /* ColorPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CAEE564118B4934E000667F2 /* ColorPickerViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -101,6 +107,12 @@
 		CA79507618B717D20094682A /* UIColor+NEOColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NEOColor.m"; sourceTree = "<group>"; };
 		CA79508318B7269C0094682A /* UIColor+RGBValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+RGBValues.h"; sourceTree = "<group>"; };
 		CA79508418B7269C0094682A /* UIColor+RGBValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+RGBValues.m"; sourceTree = "<group>"; };
+		CA79508618B73A880094682A /* whole.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = whole.config; path = config/whole.config; sourceTree = "<group>"; };
+		CA79508818B742440094682A /* split-horiz.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "split-horiz.config"; path = "config/split-horiz.config"; sourceTree = "<group>"; };
+		CA79508A18B7585D0094682A /* split-vert.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "split-vert.config"; path = "config/split-vert.config"; sourceTree = "<group>"; };
+		CA79508C18B75BAB0094682A /* split-horiz-thirds.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "split-horiz-thirds.config"; path = "config/split-horiz-thirds.config"; sourceTree = "<group>"; };
+		CA79508E18B75C9E0094682A /* split-vert-thirds.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "split-vert-thirds.config"; path = "config/split-vert-thirds.config"; sourceTree = "<group>"; };
+		CA79509018B75CF70094682A /* quadrants.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = quadrants.config; path = config/quadrants.config; sourceTree = "<group>"; };
 		CAEE564018B4934E000667F2 /* ColorPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPickerViewController.h; sourceTree = "<group>"; };
 		CAEE564118B4934E000667F2 /* ColorPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorPickerViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -187,6 +199,12 @@
 				CA30BC2F18ADD69D002A831C /* Supporting Files */,
 				CAEE564018B4934E000667F2 /* ColorPickerViewController.h */,
 				CAEE564118B4934E000667F2 /* ColorPickerViewController.m */,
+				CA79508E18B75C9E0094682A /* split-vert-thirds.config */,
+				CA79509018B75CF70094682A /* quadrants.config */,
+				CA79508C18B75BAB0094682A /* split-horiz-thirds.config */,
+				CA79508818B742440094682A /* split-horiz.config */,
+				CA79508A18B7585D0094682A /* split-vert.config */,
+				CA79508618B73A880094682A /* whole.config */,
 			);
 			path = Lightr;
 			sourceTree = "<group>";
@@ -325,10 +343,16 @@
 				CA17A2D318B6FE7800E68DA7 /* Main.storyboard in Resources */,
 				CA79507F18B717D20094682A /* NEOColorPickerHueGridViewController.xib in Resources */,
 				CA30BC4418ADD69D002A831C /* Images.xcassets in Resources */,
+				CA79508918B742440094682A /* split-horiz.config in Resources */,
 				CA79507D18B717D20094682A /* NEOColorPickerHSLViewController.xib in Resources */,
+				CA79508F18B75C9E0094682A /* split-vert-thirds.config in Resources */,
+				CA79508D18B75BAB0094682A /* split-horiz-thirds.config in Resources */,
 				CA30BC3318ADD69D002A831C /* InfoPlist.strings in Resources */,
 				CA79508118B717D20094682A /* NEOColorPickerViewController.xib in Resources */,
+				CA79508718B73A880094682A /* whole.config in Resources */,
 				CA79507718B717D20094682A /* colorPicker.bundle in Resources */,
+				CA79508B18B7585D0094682A /* split-vert.config in Resources */,
+				CA79509118B75CF70094682A /* quadrants.config in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
