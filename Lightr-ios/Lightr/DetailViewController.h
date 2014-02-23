@@ -26,7 +26,13 @@ UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UIScrollView *logView;
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 
+@property (weak, nonatomic) IBOutlet UISwitch *powerSwitch;
+@property (weak, nonatomic) IBOutlet UISlider *brightnessSlider;
+
 @property (nonatomic, strong) TVIcon *previewTV;
+
+- (IBAction)togglePower:(id)sender;
+- (IBAction)changeBrightness:(id)sender;
 
 - (IBAction) sendLog:(id)sender;
 - (IBAction) clearLog:(id)sender;

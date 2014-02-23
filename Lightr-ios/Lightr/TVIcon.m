@@ -12,7 +12,7 @@
 
 #define ASPECT_RATIO        3/4
 #define HORIZ_BLOCK_COUNT   32.f
-#define VERT_BLOCK_COUNT    17.f
+#define VERT_BLOCK_COUNT    19.f
 
 @interface TVIcon()
 
@@ -122,18 +122,9 @@
         block.tag = i;
         block.userInteractionEnabled = TRUE;
         block.font = [UIFont systemFontOfSize:8];
+//        block.text = [NSString stringWithFormat:@"%d", i];
         [self addSubview:block];
     }
-    
-    // use the associated configuration
-//    for(UIView *v in self.subviews) {
-//        NSString *str = [[TVIcon configDict] objectForKey:[NSNumber numberWithInt:_configuration]];
-//        NSString *sstring = [str substringWithRange:NSMakeRange(v.tag, 1)];
-//        NSUInteger singleValue = sstring.integerValue;
-////        NSLog(@"SingleValue: %d", singleValue);
-////        NSLog(@"Colors: %@", _colors);
-//        v.backgroundColor = [_colors objectAtIndex:singleValue];
-//    }
 
 }
 

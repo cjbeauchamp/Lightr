@@ -30,9 +30,27 @@
 }
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 
+- (void) sendCommand:(NSString*)command withValue:(id)value showOverlay:(BOOL)overlay;
+
 @end
 
 @implementation DetailViewController
+
+- (IBAction)togglePower:(id)sender
+{
+    UISwitch *sw = (UISwitch*)sender;
+    [self sendCommand:(sw.on)?@"on":@"off"
+            withValue:nil
+          showOverlay:FALSE];
+}
+
+- (IBAction)changeBrightness:(id)sender
+{
+    UISlider *slider = (UISlider*)sender;
+    int newValue = (int) slider.value;
+    NSLog(@"Newvalue: %d", newValue);
+    [self sendCommand:@"brightness" withValue:[NSString stringWithFormat:@"%d", newValue] showOverlay:FALSE];
+}
 
 - (void) saveWithName:(NSString*)name
 {
@@ -79,24 +97,18 @@
     return (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
-- (void) sendCommand:(NSString*)command
+- (void) sendCommand:(NSString*)command withValue:(id)value
+{
+    [self sendCommand:command withValue:value showOverlay:TRUE];
+}
+
+- (void) sendCommand:(NSString*)command withValue:(NSString*)value showOverlay:(BOOL)overlay
 {
     [KTLoader showLoader:@"Working hard. Chill out dude"];
     
-    NSMutableString *colors = [NSMutableString stringWithString:@""];
-
-    int found = 0;
-    while(found < _previewTV.subviews.count) {
-        for(UIView *v in _previewTV.subviews) {
-            if(v.tag == found) {
-                [colors appendString:[v.backgroundColor hexValue]];
-                ++found;
-                break;
-            }
-        }
-    }
+    if(value == nil) { value = @""; }
     
-    NSString *urlString = [NSString stringWithFormat:@"http://arduino.local/arduino/c/%@/v/%@/",command,colors];
+    NSString *urlString = [NSString stringWithFormat:@"http://arduino.local/arduino/c/%@/v/%@/", command, value];
     
     [self addLog:[NSString stringWithFormat:@"Making request: %@", urlString]];
     
@@ -109,10 +121,7 @@
                                [self addLog:[NSString stringWithFormat:@"DATA => %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]]];
                                
                                if(connectionError == nil) {
-                                   [KTLoader showLoader:@"All Done!"
-                                               animated:TRUE
-                                          withIndicator:KTLoaderIndicatorSuccess
-                                        andHideInterval:KTLoaderDurationAuto];
+                                   [KTLoader hideLoader];
                                } else {
                                    [KTLoader showLoader:@"Something broke! Tell Chris!"
                                                animated:TRUE
@@ -137,7 +146,20 @@
 
 - (IBAction) apply:(id)sender
 {
-    [self sendCommand:@"standard"];
+    NSMutableString *colors = [NSMutableString stringWithString:@""];
+    
+    int found = 0;
+    while(found < _previewTV.subviews.count) {
+        for(UIView *v in _previewTV.subviews) {
+            if(v.tag == found) {
+                [colors appendString:[v.backgroundColor hexValue]];
+                ++found;
+                break;
+            }
+        }
+    }
+
+    [self sendCommand:@"standard" withValue:colors];
     [self saveWithName:nil];
 }
 
@@ -335,6 +357,42 @@
     [_colorPopover dismissPopoverAnimated:TRUE];
 }
 
+- (void) viewDidAppear:(BOOL)animated
+{
+    [KTLoader showLoader:@"Loading Status..."];
+    
+    
+    NSString *urlString = @"http://arduino.local/arduino/c/get/v/nothing/";
+    
+    [self addLog:[NSString stringWithFormat:@"Making request: %@", urlString]];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+    [request setTimeoutInterval:30];
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                               
+                               if(connectionError == nil) {
+                                   [KTLoader hideLoader];
+                                   
+                                   NSDictionary* json = [NSJSONSerialization
+                                                         JSONObjectWithData:data
+                                                         options:0
+                                                         error:nil];
+                                                                      
+                                   _powerSwitch.on = [[json objectForKey:@"power"] integerValue] == 1;
+                                   _brightnessSlider.value = [[json objectForKey:@"brightness"] integerValue];
+                                   
+                               } else {
+                                   [KTLoader showLoader:@"Something broke! Tell Chris!"
+                                               animated:TRUE
+                                          withIndicator:KTLoaderIndicatorError
+                                        andHideInterval:KTLoaderDurationAuto];
+                               }
+                               
+                           }];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -346,7 +404,7 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(previewTapped:)];
     
     _previewTV = [TVIcon iconWithWidth:500];
-    _previewTV.center = CGPointMake(352, 270);
+    _previewTV.center = CGPointMake(352, 310);
 //    [_previewTV configure:TVConfigurationWhole withColors:@[[UIColor blackColor]]];
     [self.view addSubview:_previewTV];
     

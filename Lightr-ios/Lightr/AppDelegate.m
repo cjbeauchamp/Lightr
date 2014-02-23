@@ -45,10 +45,14 @@
     // load the config files into core data
     NSString *dirString = [[NSBundle mainBundle] resourcePath];
     
-    for(NSString *dirFile in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dirString error:nil]) {
+    NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dirString error:nil];
+    
+    for(NSString *dirFile in files) {
         if([dirFile rangeOfString:@".config"].location != NSNotFound) {
             
             NSString *path = [dirString stringByAppendingPathComponent:dirFile];
+            
+            NSLog(@"Got it at path: %@", path);
             
             // read the config
             NSData *fileData = [NSData dataWithContentsOfFile:path];

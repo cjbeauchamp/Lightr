@@ -36,6 +36,11 @@
 		CA5C0BD918B3E4CA0066AB18 /* Configuration.m in Sources */ = {isa = PBXBuildFile; fileRef = CA5C0BD818B3E4CA0066AB18 /* Configuration.m */; };
 		CA5C0BDC18B3EFC70066AB18 /* ConfigurationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CA5C0BDB18B3EFC70066AB18 /* ConfigurationCell.m */; };
 		CA72A11518B97166009418C7 /* CategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA72A11418B97166009418C7 /* CategoryViewController.m */; };
+		CA72A11918B9D6D5009418C7 /* 2-horiz.config in Resources */ = {isa = PBXBuildFile; fileRef = CA72A11818B9D6D5009418C7 /* 2-horiz.config */; };
+		CA72A11B18B9D757009418C7 /* 2-vert.config in Resources */ = {isa = PBXBuildFile; fileRef = CA72A11A18B9D757009418C7 /* 2-vert.config */; };
+		CA72A11D18B9D91F009418C7 /* 3-vert.config in Resources */ = {isa = PBXBuildFile; fileRef = CA72A11C18B9D91F009418C7 /* 3-vert.config */; };
+		CA72A11F18B9DA18009418C7 /* 3-horiz.config in Resources */ = {isa = PBXBuildFile; fileRef = CA72A11E18B9DA18009418C7 /* 3-horiz.config */; };
+		CA72A12118B9DADC009418C7 /* quadrants.config in Resources */ = {isa = PBXBuildFile; fileRef = CA72A12018B9DADC009418C7 /* quadrants.config */; };
 		CA79507718B717D20094682A /* colorPicker.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CA79506418B717D20094682A /* colorPicker.bundle */; };
 		CA79507818B717D20094682A /* NEOColorPickerBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA79506618B717D20094682A /* NEOColorPickerBaseViewController.m */; };
 		CA79507B18B717D20094682A /* NEOColorPickerGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = CA79506B18B717D20094682A /* NEOColorPickerGradientView.m */; };
@@ -104,6 +109,11 @@
 		CA5C0BDB18B3EFC70066AB18 /* ConfigurationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigurationCell.m; sourceTree = "<group>"; };
 		CA72A11318B97166009418C7 /* CategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoryViewController.h; sourceTree = "<group>"; };
 		CA72A11418B97166009418C7 /* CategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CategoryViewController.m; sourceTree = "<group>"; };
+		CA72A11818B9D6D5009418C7 /* 2-horiz.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "2-horiz.config"; path = "config/2-horiz.config"; sourceTree = "<group>"; };
+		CA72A11A18B9D757009418C7 /* 2-vert.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "2-vert.config"; path = "config/2-vert.config"; sourceTree = "<group>"; };
+		CA72A11C18B9D91F009418C7 /* 3-vert.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "3-vert.config"; path = "config/3-vert.config"; sourceTree = "<group>"; };
+		CA72A11E18B9DA18009418C7 /* 3-horiz.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "3-horiz.config"; path = "config/3-horiz.config"; sourceTree = "<group>"; };
+		CA72A12018B9DADC009418C7 /* quadrants.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = quadrants.config; path = config/quadrants.config; sourceTree = "<group>"; };
 		CA79506418B717D20094682A /* colorPicker.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = colorPicker.bundle; sourceTree = "<group>"; };
 		CA79506518B717D20094682A /* NEOColorPickerBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NEOColorPickerBaseViewController.h; sourceTree = "<group>"; };
 		CA79506618B717D20094682A /* NEOColorPickerBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NEOColorPickerBaseViewController.m; sourceTree = "<group>"; };
@@ -228,6 +238,7 @@
 		CA30BC2E18ADD69D002A831C /* Lightr */ = {
 			isa = PBXGroup;
 			children = (
+				CA72A11618B9D446009418C7 /* Config */,
 				CA1453A018B7D8AE0049A1BC /* KTCircularProgressIndicator */,
 				CA14539318B7D89A0049A1BC /* KTLoader */,
 				CA79508318B7269C0094682A /* UIColor+RGBValues.h */,
@@ -253,7 +264,6 @@
 				CA30BC2F18ADD69D002A831C /* Supporting Files */,
 				CAEE564018B4934E000667F2 /* ColorPickerViewController.h */,
 				CAEE564118B4934E000667F2 /* ColorPickerViewController.m */,
-				CA79508618B73A880094682A /* whole.config */,
 			);
 			path = Lightr;
 			sourceTree = "<group>";
@@ -285,6 +295,27 @@
 				CA30BC5318ADD69D002A831C /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CA72A11618B9D446009418C7 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				CA72A11718B9D44E009418C7 /* Standard */,
+			);
+			name = Config;
+			sourceTree = "<group>";
+		};
+		CA72A11718B9D44E009418C7 /* Standard */ = {
+			isa = PBXGroup;
+			children = (
+				CA72A12018B9DADC009418C7 /* quadrants.config */,
+				CA72A11E18B9DA18009418C7 /* 3-horiz.config */,
+				CA72A11A18B9D757009418C7 /* 2-vert.config */,
+				CA79508618B73A880094682A /* whole.config */,
+				CA72A11818B9D6D5009418C7 /* 2-horiz.config */,
+				CA72A11C18B9D91F009418C7 /* 3-vert.config */,
+			);
+			name = Standard;
 			sourceTree = "<group>";
 		};
 		CA79506318B717C20094682A /* ColorPicker */ = {
@@ -391,16 +422,21 @@
 			files = (
 				CA17A2D318B6FE7800E68DA7 /* Main.storyboard in Resources */,
 				CA79507F18B717D20094682A /* NEOColorPickerHueGridViewController.xib in Resources */,
+				CA72A11918B9D6D5009418C7 /* 2-horiz.config in Resources */,
 				CA30BC4418ADD69D002A831C /* Images.xcassets in Resources */,
+				CA72A11D18B9D91F009418C7 /* 3-vert.config in Resources */,
 				CA79507D18B717D20094682A /* NEOColorPickerHSLViewController.xib in Resources */,
 				CA30BC3318ADD69D002A831C /* InfoPlist.strings in Resources */,
 				CA79508118B717D20094682A /* NEOColorPickerViewController.xib in Resources */,
 				CA79508718B73A880094682A /* whole.config in Resources */,
 				CA14539B18B7D89A0049A1BC /* failure-indicator.png in Resources */,
+				CA72A11B18B9D757009418C7 /* 2-vert.config in Resources */,
 				CA14539D18B7D89A0049A1BC /* success-indicator.png in Resources */,
 				CA79507718B717D20094682A /* colorPicker.bundle in Resources */,
 				CA14539E18B7D89A0049A1BC /* success-indicator@2x.png in Resources */,
+				CA72A11F18B9DA18009418C7 /* 3-horiz.config in Resources */,
 				CA14539C18B7D89A0049A1BC /* failure-indicator@2x.png in Resources */,
+				CA72A12118B9DADC009418C7 /* quadrants.config in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
