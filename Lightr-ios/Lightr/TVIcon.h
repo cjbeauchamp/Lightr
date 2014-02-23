@@ -8,25 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-enum {
-    TVConfigurationWhole,
-    TVConfigurationSplitHorizontal,
-    TVConfigurationSplitVertical,
-    TVConfigurationSplitHorizontalThirds,
-    TVConfigurationSplitVerticalThirds,
-    TVConfigurationSplitQuadrants
-};
-
-typedef NSUInteger TVConfiguration;
+@class Configuration;
 
 @interface TVIcon : UIView
 
-@property (nonatomic, assign) TVConfiguration configuration;
-@property (nonatomic, strong) NSArray *colors;
+@property (nonatomic, assign) Configuration *configuration;
+@property (nonatomic, strong) NSArray *currentColors;
 
 + (TVIcon*) iconWithWidth:(CGFloat)width;
 
-- (void) configure:(TVConfiguration)config withColors:(NSArray*)colors;
+- (void) setupWithConfiguration:(Configuration*)configuration;
 - (NSInteger) indexAtTapPosition:(CGPoint)pt;
 - (void) replaceColorAtIndex:(NSUInteger)ndx withColor:(UIColor*)color;
 

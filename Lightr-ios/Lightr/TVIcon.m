@@ -8,88 +8,19 @@
 
 #import "TVIcon.h"
 
-#define ASPECT_RATIO        3/4
-#define HORIZ_BLOCK_COUNT   30.f
-#define VERT_BLOCK_COUNT    19.f
+#import "Configuration.h"
 
-@interface TVIcon() {
-    NSDictionary *_configDict;
-}
+#define ASPECT_RATIO        3/4
+#define HORIZ_BLOCK_COUNT   32.f
+#define VERT_BLOCK_COUNT    17.f
+
+@interface TVIcon()
 
 - (void) reconfigure;
-+ (NSDictionary*) configDict;
 
 @end
 
 @implementation TVIcon
-
-static NSDictionary *sharedConfigDict = nil;
-
-+ (NSDictionary*) configDict
-{    
-    if(sharedConfigDict == nil) {
-        
-        NSMutableDictionary *mutableConfig = [NSMutableDictionary dictionary];
-        
-        int configIndex = TVConfigurationWhole;
-        
-        NSArray *configFiles = @[
-                                 @"whole.config",
-                                 @"split-horiz.config",
-                                 @"split-vert.config",
-                                 @"split-horiz-thirds.config",
-                                 @"split-vert-thirds.config",
-                                 @"quadrants.config"
-                                 ];
-        for(NSString *file in configFiles) {
-            
-            NSString *fileString = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:file];
-            
-            //        NSLog(@"File => %@", fileString);
-            
-            NSData *fileData = [NSData dataWithContentsOfFile:fileString];
-            NSString *configString = [[NSString alloc] initWithData:fileData encoding:NSUTF8StringEncoding];
-            
-            //        NSLog(@"REading configString : %@", configString);
-            
-            // read the string from top left to right for now
-            
-            NSMutableString *finalString = [NSMutableString stringWithString:@""];
-            
-            NSArray *comp = [configString componentsSeparatedByString:@"\n"];
-            
-            // read the bottom line (backwards)
-            NSMutableString *reversed = [NSMutableString stringWithString:@""];
-            for(int i = ((NSString*)[comp lastObject]).length-1; i>=0; i--) {
-                [reversed appendString:[[comp lastObject] substringWithRange:NSMakeRange(i, 1)]];
-            }
-            [finalString appendString:reversed];
-            
-            // read the left column (bottom to top)
-            for(int i=comp.count-2; i>=0; i--) {
-                NSString *line = [comp objectAtIndex:i];
-                [finalString appendString:[line substringToIndex:1]];
-            }
-            
-            // read the top line
-            [finalString appendString:[[comp objectAtIndex:0] substringFromIndex:1]];
-            
-            // read the right column
-            for(int i=1; i<comp.count-1; i++) {
-                NSString *line = [comp objectAtIndex:i];
-                [finalString appendString:[line substringFromIndex:line.length-1]];
-            }
-            
-            [mutableConfig setObject:finalString forKey:[NSNumber numberWithInt:configIndex]];
-            
-            ++configIndex;
-        }
-        
-        sharedConfigDict = [NSDictionary dictionaryWithDictionary:mutableConfig];
-    }
-    
-    return sharedConfigDict;
-}
 
 + (TVIcon*) iconWithWidth:(CGFloat)width
 {
@@ -112,8 +43,7 @@ static NSDictionary *sharedConfigDict = nil;
     if(![v isKindOfClass:[TVIcon class]]) {
         
         NSInteger tag = v.tag;
-        NSString *items = [[TVIcon configDict] objectForKey:[NSNumber numberWithInteger:_configuration]];
-        NSString *item = [items substringWithRange:NSMakeRange(tag, 1)];
+        NSString *item = [_configuration.configurationString substringWithRange:NSMakeRange(tag, 1)];
         
         ndx = item.integerValue;
     }
@@ -123,18 +53,28 @@ static NSDictionary *sharedConfigDict = nil;
 
 - (void) replaceColorAtIndex:(NSUInteger)ndx withColor:(UIColor*)color
 {
-    NSMutableArray *colors = [_colors mutableCopy];
-    [colors replaceObjectAtIndex:ndx withObject:color];
-    _colors = [NSArray arrayWithArray:colors];
+    NSMutableArray *colors = [(NSArray*)_configuration.colors mutableCopy];
+
+    // iterate thru our string to get everything with the same config
+    NSString *ch = [_configuration.configurationString substringWithRange:NSMakeRange(ndx, 1)];
+    
+    for(int i=0; i<_configuration.configurationString.length; i++) {
+        NSString *testCh = [_configuration.configurationString substringWithRange:NSMakeRange(i, 1)];
+                
+        if([testCh isEqualToString:ch]) {
+            [colors replaceObjectAtIndex:i withObject:color];
+        }
+    }
+    
+    _currentColors = [NSArray arrayWithArray:colors];
     
     [self reconfigure];
 }
 
-- (void) configure:(TVConfiguration)config
-        withColors:(NSArray*)colors
+- (void) setupWithConfiguration:(Configuration*)configuration
 {
-    _colors = colors;
-    _configuration = config;
+    _configuration = configuration;
+    _currentColors = [NSArray arrayWithArray:configuration.colors];
     
     [self reconfigure];
 }
@@ -150,9 +90,9 @@ static NSDictionary *sharedConfigDict = nil;
     CGFloat blockWidth = roundf(self.frame.size.width / HORIZ_BLOCK_COUNT);
     CGFloat blockHeight = roundf(self.frame.size.width * ASPECT_RATIO / VERT_BLOCK_COUNT);
     
-    NSString *configString = [[TVIcon configDict] objectForKey:[NSNumber numberWithInt:_configuration]];
+//    NSString *configString = [[TVIcon configDict] objectForKey:[NSNumber numberWithInt:_configuration]];
     
-    for(int i=0; i<configString.length; i++) {
+    for(int i=0; i<_currentColors.count; i++) {
         
         // start in the bottom-right
         CGFloat x = 0;
@@ -178,23 +118,22 @@ static NSDictionary *sharedConfigDict = nil;
         }
 
         UILabel *block = [[UILabel alloc] initWithFrame:CGRectMake(x, y, blockWidth, blockHeight)];
-        block.backgroundColor = [UIColor blackColor];
+        block.backgroundColor = [_currentColors objectAtIndex:i];
         block.tag = i;
         block.userInteractionEnabled = TRUE;
         block.font = [UIFont systemFontOfSize:8];
-//        block.text = [NSString stringWithFormat:@"%d", i];
         [self addSubview:block];
     }
     
     // use the associated configuration
-    for(UIView *v in self.subviews) {
-        NSString *str = [[TVIcon configDict] objectForKey:[NSNumber numberWithInt:_configuration]];
-        NSString *sstring = [str substringWithRange:NSMakeRange(v.tag, 1)];
-        NSUInteger singleValue = sstring.integerValue;
-//        NSLog(@"SingleValue: %d", singleValue);
-//        NSLog(@"Colors: %@", _colors);
-        v.backgroundColor = [_colors objectAtIndex:singleValue];
-    }
+//    for(UIView *v in self.subviews) {
+//        NSString *str = [[TVIcon configDict] objectForKey:[NSNumber numberWithInt:_configuration]];
+//        NSString *sstring = [str substringWithRange:NSMakeRange(v.tag, 1)];
+//        NSUInteger singleValue = sstring.integerValue;
+////        NSLog(@"SingleValue: %d", singleValue);
+////        NSLog(@"Colors: %@", _colors);
+//        v.backgroundColor = [_colors objectAtIndex:singleValue];
+//    }
 
 }
 

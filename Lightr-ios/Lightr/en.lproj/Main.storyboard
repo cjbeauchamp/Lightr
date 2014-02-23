@@ -166,21 +166,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="Zdf-7t-Un8">
                         <nil key="title"/>
-                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="RSo-pj-TDn">
-                            <rect key="frame" x="89" y="7" width="141" height="31"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <segments>
-                                <segment title="Favorites"/>
-                                <segment title="Recent"/>
-                            </segments>
-                            <connections>
-                                <action selector="segmentChanged:" destination="7bK-jq-Zjz" eventType="valueChanged" id="RJa-Nl-PM7"/>
-                            </connections>
-                        </segmentedControl>
                     </navigationItem>
-                    <connections>
-                        <outlet property="segment" destination="RSo-pj-TDn" id="G6H-hc-SD1"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rux-fX-hf1" sceneMemberID="firstResponder"/>
             </objects>

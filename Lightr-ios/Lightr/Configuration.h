@@ -14,8 +14,8 @@
 
 @property (nonatomic, retain) NSDate * created;
 @property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSNumber * configurationType;
+@property (nonatomic, retain) NSString * configurationString;
+@property (nonatomic, retain) NSNumber * categoryType;
 @property (nonatomic, retain) id colors;
-@property (nonatomic, retain) NSNumber * isFavorite;
 
 @end

@@ -13,8 +13,8 @@
 
 @dynamic created;
 @dynamic name;
-@dynamic configurationType;
+@dynamic configurationString;
+@dynamic categoryType;
 @dynamic colors;
-@dynamic isFavorite;
 
 @end

@@ -29,7 +29,7 @@
     UIPopoverController *_colorPopover;
 }
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
-- (void) configureView;
+
 @end
 
 @implementation DetailViewController
@@ -47,12 +47,12 @@
     // If appropriate, configure the new managed object.
     // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
     newObj.created = [NSDate date];
-    newObj.configurationType = [NSNumber numberWithInteger:_previewTV.configuration];
-    newObj.isFavorite = [NSNumber numberWithBool:(name != nil)];
-    newObj.colors = _previewTV.colors;
+    newObj.categoryType = [NSNumber numberWithInteger:(name != nil) ? CategoryTypeFavorite : CategoryTypeRecent];
+    newObj.colors = _previewTV.currentColors;
+    newObj.configurationString = _previewTV.configuration.configurationString;
     newObj.name = name;
     
-    NSMutableString *msg = [NSMutableString stringWithFormat:@"Applying[isFavorite=%d][config=%d] =>", newObj.isFavorite.integerValue, newObj.configurationType.integerValue];
+    NSMutableString *msg = [NSMutableString stringWithFormat:@"Applying[category=%d] =>", newObj.categoryType.integerValue];
     for(UIColor *c in newObj.colors) { [msg appendFormat:@" (%@)", c.description]; }
     [self addLog:msg];
 
@@ -72,17 +72,6 @@
     if(buttonIndex != alertView.cancelButtonIndex) {
         [self saveWithName:[alertView textFieldAtIndex:0].text];
     }
-}
-
-- (NSString*)createRandomHex
-{
-    NSString *chars = @"0123456789ABCDEF";
-    NSMutableString *retString = [NSMutableString stringWithString:@""];
-    for(int i=0; i<6; i++) {
-        int loc = arc4random() % chars.length;
-        [retString appendString:[chars substringWithRange:NSMakeRange(loc, 1)]];
-    }
-    return [NSString stringWithString:retString];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -107,7 +96,7 @@
         }
     }
     
-    NSString *urlString = [NSString stringWithFormat:@"http://arduino.local/arduino/c/%@/p/%@/",command,colors];
+    NSString *urlString = [NSString stringWithFormat:@"http://arduino.local/arduino/c/%@/v/%@/",command,colors];
     
     [self addLog:[NSString stringWithFormat:@"Making request: %@", urlString]];
     
@@ -136,8 +125,6 @@
 
 - (IBAction) saveToFavorites:(id)sender
 {
-    [self sendCommand:@"blink"];
-    
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Add Name"
                                                  message:@"Add a name to your favorite"
                                                 delegate:self
@@ -150,12 +137,7 @@
 
 - (IBAction) apply:(id)sender
 {
-    [self sendCommand:@"blink_fast"];
-
-    //switch to the recent tab
-    [[AppDelegate shared].masterViewController.segment setSelectedSegmentIndex:1];
-    [[AppDelegate shared].masterViewController segmentChanged:self];
-    
+    [self sendCommand:@"standard"];
     [self saveWithName:nil];
 }
 
@@ -292,9 +274,6 @@
 {
     if (_detailItem != newDetailItem) {
         _detailItem = newDetailItem;
-        
-        // Update the view.
-        [self configureView];
     }
 
     if (self.masterPopoverController != nil) {
@@ -305,43 +284,9 @@
 - (void) changeConfiguration:(UITapGestureRecognizer*)gesture
 {
     TVIcon *icon = (TVIcon*)gesture.view;
-    [_previewTV configure:icon.configuration withColors:icon.colors];
+    [_previewTV setupWithConfiguration:icon.configuration];
     
-    [self addLog:[NSString stringWithFormat:@"Changing configuration: %d", icon.configuration]];
-}
-
-- (void)configureView
-{
-    CGFloat y = round(_configurations.frame.size.height/2);
-    
-    NSArray *colors = @[[UIColor redColor],
-                        [UIColor orangeColor],
-                        [UIColor greenColor],
-                        [UIColor blueColor]];
-    
-    for(int i=TVConfigurationWhole; i<TVConfigurationSplitQuadrants+1; i++) {
-
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeConfiguration:)];
-        TVIcon *icon = [TVIcon iconWithWidth:80];
-        icon.center = CGPointMake(60 + 100 * i, y);
-        
-        NSArray *useColors = nil;
-        if(i == TVConfigurationWhole) {
-            useColors = [colors objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)]];
-        } else if(i == TVConfigurationSplitHorizontal || i == TVConfigurationSplitVertical) {
-            useColors = [colors objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 2)]];
-        } else if(i == TVConfigurationSplitHorizontalThirds || i == TVConfigurationSplitVerticalThirds) {
-            useColors = [colors objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 3)]];
-        } else if(i == TVConfigurationSplitQuadrants) {
-            useColors = [colors objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 4)]];
-        }
-        
-        [icon configure:i withColors:useColors];
-        [_configurations addSubview:icon];
-        [icon addGestureRecognizer:tap];
-
-    }
-
+    [self addLog:[NSString stringWithFormat:@"Changing configuration: %d", icon.configuration.categoryType.integerValue]];
 }
 
 - (void) previewTapped:(UITapGestureRecognizer*)tap
@@ -354,7 +299,7 @@
     
     if(_selectingIndex > -1) {
         
-        UIColor *curColor = [[_previewTV colors] objectAtIndex:_selectingIndex];
+        UIColor *curColor = [_previewTV.currentColors objectAtIndex:_selectingIndex];
         
         CGPoint superPoint = [self.view convertPoint:pt fromView:_previewTV];
         
@@ -397,14 +342,12 @@
     [AppDelegate shared].detailViewController = self;
     
     _log = [[NSMutableArray alloc] initWithCapacity:2];
-
-    [self configureView];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(previewTapped:)];
     
-    _previewTV = [TVIcon iconWithWidth:370];
-    _previewTV.center = CGPointMake(352, 370);
-    [_previewTV configure:TVConfigurationWhole withColors:@[[UIColor blackColor]]];
+    _previewTV = [TVIcon iconWithWidth:500];
+    _previewTV.center = CGPointMake(352, 270);
+//    [_previewTV configure:TVConfigurationWhole withColors:@[[UIColor blackColor]]];
     [self.view addSubview:_previewTV];
     
     [_previewTV addGestureRecognizer:tap];

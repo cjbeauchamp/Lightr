@@ -7,19 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
 
 @class DetailViewController;
 
+enum {
+    CategoryTypeRecent = 1,
+    CategoryTypeFavorite = 2,
+    CategoryTypeStandard = 3,
+    CategoryTypeAnimated = 4,
+    CategoryTypeFlags = 5,
+    CategoryTypeOther = 6
+}; typedef NSUInteger CategoryType;
+
 @interface MasterViewController : UITableViewController
-<NSFetchedResultsControllerDelegate>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-
-@property (strong, nonatomic) IBOutlet UISegmentedControl *segment;
-
-- (IBAction) segmentChanged:(id)sender;
 
 @end

@@ -35,6 +35,7 @@
 		CA5C0BD618B3E17A0066AB18 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA5C0BD518B3E17A0066AB18 /* CoreData.framework */; };
 		CA5C0BD918B3E4CA0066AB18 /* Configuration.m in Sources */ = {isa = PBXBuildFile; fileRef = CA5C0BD818B3E4CA0066AB18 /* Configuration.m */; };
 		CA5C0BDC18B3EFC70066AB18 /* ConfigurationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CA5C0BDB18B3EFC70066AB18 /* ConfigurationCell.m */; };
+		CA72A11518B97166009418C7 /* CategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA72A11418B97166009418C7 /* CategoryViewController.m */; };
 		CA79507718B717D20094682A /* colorPicker.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CA79506418B717D20094682A /* colorPicker.bundle */; };
 		CA79507818B717D20094682A /* NEOColorPickerBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CA79506618B717D20094682A /* NEOColorPickerBaseViewController.m */; };
 		CA79507B18B717D20094682A /* NEOColorPickerGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = CA79506B18B717D20094682A /* NEOColorPickerGradientView.m */; };
@@ -47,11 +48,6 @@
 		CA79508218B717D20094682A /* UIColor+NEOColor.m in Sources */ = {isa = PBXBuildFile; fileRef = CA79507618B717D20094682A /* UIColor+NEOColor.m */; };
 		CA79508518B7269C0094682A /* UIColor+RGBValues.m in Sources */ = {isa = PBXBuildFile; fileRef = CA79508418B7269C0094682A /* UIColor+RGBValues.m */; };
 		CA79508718B73A880094682A /* whole.config in Resources */ = {isa = PBXBuildFile; fileRef = CA79508618B73A880094682A /* whole.config */; };
-		CA79508918B742440094682A /* split-horiz.config in Resources */ = {isa = PBXBuildFile; fileRef = CA79508818B742440094682A /* split-horiz.config */; };
-		CA79508B18B7585D0094682A /* split-vert.config in Resources */ = {isa = PBXBuildFile; fileRef = CA79508A18B7585D0094682A /* split-vert.config */; };
-		CA79508D18B75BAB0094682A /* split-horiz-thirds.config in Resources */ = {isa = PBXBuildFile; fileRef = CA79508C18B75BAB0094682A /* split-horiz-thirds.config */; };
-		CA79508F18B75C9E0094682A /* split-vert-thirds.config in Resources */ = {isa = PBXBuildFile; fileRef = CA79508E18B75C9E0094682A /* split-vert-thirds.config */; };
-		CA79509118B75CF70094682A /* quadrants.config in Resources */ = {isa = PBXBuildFile; fileRef = CA79509018B75CF70094682A /* quadrants.config */; };
 		CAEE564218B4934E000667F2 /* ColorPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CAEE564118B4934E000667F2 /* ColorPickerViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -106,6 +102,8 @@
 		CA5C0BD818B3E4CA0066AB18 /* Configuration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Configuration.m; sourceTree = "<group>"; };
 		CA5C0BDA18B3EFC70066AB18 /* ConfigurationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigurationCell.h; sourceTree = "<group>"; };
 		CA5C0BDB18B3EFC70066AB18 /* ConfigurationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigurationCell.m; sourceTree = "<group>"; };
+		CA72A11318B97166009418C7 /* CategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoryViewController.h; sourceTree = "<group>"; };
+		CA72A11418B97166009418C7 /* CategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CategoryViewController.m; sourceTree = "<group>"; };
 		CA79506418B717D20094682A /* colorPicker.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = colorPicker.bundle; sourceTree = "<group>"; };
 		CA79506518B717D20094682A /* NEOColorPickerBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NEOColorPickerBaseViewController.h; sourceTree = "<group>"; };
 		CA79506618B717D20094682A /* NEOColorPickerBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NEOColorPickerBaseViewController.m; sourceTree = "<group>"; };
@@ -125,11 +123,6 @@
 		CA79508318B7269C0094682A /* UIColor+RGBValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+RGBValues.h"; sourceTree = "<group>"; };
 		CA79508418B7269C0094682A /* UIColor+RGBValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+RGBValues.m"; sourceTree = "<group>"; };
 		CA79508618B73A880094682A /* whole.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = whole.config; path = config/whole.config; sourceTree = "<group>"; };
-		CA79508818B742440094682A /* split-horiz.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "split-horiz.config"; path = "config/split-horiz.config"; sourceTree = "<group>"; };
-		CA79508A18B7585D0094682A /* split-vert.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "split-vert.config"; path = "config/split-vert.config"; sourceTree = "<group>"; };
-		CA79508C18B75BAB0094682A /* split-horiz-thirds.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "split-horiz-thirds.config"; path = "config/split-horiz-thirds.config"; sourceTree = "<group>"; };
-		CA79508E18B75C9E0094682A /* split-vert-thirds.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "split-vert-thirds.config"; path = "config/split-vert-thirds.config"; sourceTree = "<group>"; };
-		CA79509018B75CF70094682A /* quadrants.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = quadrants.config; path = config/quadrants.config; sourceTree = "<group>"; };
 		CAEE564018B4934E000667F2 /* ColorPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPickerViewController.h; sourceTree = "<group>"; };
 		CAEE564118B4934E000667F2 /* ColorPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorPickerViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -252,17 +245,14 @@
 				CA17A2D118B6FE7800E68DA7 /* Main.storyboard */,
 				CA30BC3D18ADD69D002A831C /* MasterViewController.h */,
 				CA30BC3E18ADD69D002A831C /* MasterViewController.m */,
+				CA72A11318B97166009418C7 /* CategoryViewController.h */,
+				CA72A11418B97166009418C7 /* CategoryViewController.m */,
 				CA30BC4018ADD69D002A831C /* DetailViewController.h */,
 				CA30BC4118ADD69D002A831C /* DetailViewController.m */,
 				CA30BC4318ADD69D002A831C /* Images.xcassets */,
 				CA30BC2F18ADD69D002A831C /* Supporting Files */,
 				CAEE564018B4934E000667F2 /* ColorPickerViewController.h */,
 				CAEE564118B4934E000667F2 /* ColorPickerViewController.m */,
-				CA79508E18B75C9E0094682A /* split-vert-thirds.config */,
-				CA79509018B75CF70094682A /* quadrants.config */,
-				CA79508C18B75BAB0094682A /* split-horiz-thirds.config */,
-				CA79508818B742440094682A /* split-horiz.config */,
-				CA79508A18B7585D0094682A /* split-vert.config */,
 				CA79508618B73A880094682A /* whole.config */,
 			);
 			path = Lightr;
@@ -402,19 +392,14 @@
 				CA17A2D318B6FE7800E68DA7 /* Main.storyboard in Resources */,
 				CA79507F18B717D20094682A /* NEOColorPickerHueGridViewController.xib in Resources */,
 				CA30BC4418ADD69D002A831C /* Images.xcassets in Resources */,
-				CA79508918B742440094682A /* split-horiz.config in Resources */,
 				CA79507D18B717D20094682A /* NEOColorPickerHSLViewController.xib in Resources */,
-				CA79508F18B75C9E0094682A /* split-vert-thirds.config in Resources */,
-				CA79508D18B75BAB0094682A /* split-horiz-thirds.config in Resources */,
 				CA30BC3318ADD69D002A831C /* InfoPlist.strings in Resources */,
 				CA79508118B717D20094682A /* NEOColorPickerViewController.xib in Resources */,
 				CA79508718B73A880094682A /* whole.config in Resources */,
 				CA14539B18B7D89A0049A1BC /* failure-indicator.png in Resources */,
 				CA14539D18B7D89A0049A1BC /* success-indicator.png in Resources */,
 				CA79507718B717D20094682A /* colorPicker.bundle in Resources */,
-				CA79508B18B7585D0094682A /* split-vert.config in Resources */,
 				CA14539E18B7D89A0049A1BC /* success-indicator@2x.png in Resources */,
-				CA79509118B75CF70094682A /* quadrants.config in Resources */,
 				CA14539C18B7D89A0049A1BC /* failure-indicator@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -450,6 +435,7 @@
 				CA79507C18B717D20094682A /* NEOColorPickerHSLViewController.m in Sources */,
 				CA79507B18B717D20094682A /* NEOColorPickerGradientView.m in Sources */,
 				CA5C0BDC18B3EFC70066AB18 /* ConfigurationCell.m in Sources */,
+				CA72A11518B97166009418C7 /* CategoryViewController.m in Sources */,
 				CAEE564218B4934E000667F2 /* ColorPickerViewController.m in Sources */,
 				CA79507818B717D20094682A /* NEOColorPickerBaseViewController.m in Sources */,
 				CA30BC4218ADD69D002A831C /* DetailViewController.m in Sources */,
