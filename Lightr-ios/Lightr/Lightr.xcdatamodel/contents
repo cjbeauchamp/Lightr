@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13B42" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Configuration" representedClassName="Configuration">
+        <attribute name="animationDelay" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="animationMode" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="animationSteps" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="categoryType" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="colors" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="configurationString" optional="YES" attributeType="String" syncable="YES"/>

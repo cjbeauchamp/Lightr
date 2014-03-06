@@ -11,6 +11,7 @@
 @class DetailViewController;
 
 enum {
+    CategoryTypeNone = 0,
     CategoryTypeRecent = 1,
     CategoryTypeFavorite = 2,
     CategoryTypeStandard = 3,

@@ -14,6 +14,9 @@
 @dynamic created;
 @dynamic name;
 @dynamic configurationString;
+@dynamic animationMode;
+@dynamic animationDelay;
+@dynamic animationSteps;
 @dynamic categoryType;
 @dynamic colors;
 

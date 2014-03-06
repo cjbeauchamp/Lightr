@@ -30,7 +30,11 @@
 }
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 
-- (void) sendCommand:(NSString*)command withValue:(id)value showOverlay:(BOOL)overlay;
+- (void) sendCommand:(NSString*)command
+           withValue:(id)value
+           andParams:(NSArray*)params
+           andColors:(NSArray*)colors
+         showOverlay:(BOOL)overlay;
 
 @end
 
@@ -41,6 +45,8 @@
     UISwitch *sw = (UISwitch*)sender;
     [self sendCommand:(sw.on)?@"on":@"off"
             withValue:nil
+            andParams:nil
+            andColors:nil
           showOverlay:FALSE];
 }
 
@@ -49,7 +55,11 @@
     UISlider *slider = (UISlider*)sender;
     int newValue = (int) slider.value;
     NSLog(@"Newvalue: %d", newValue);
-    [self sendCommand:@"brightness" withValue:[NSString stringWithFormat:@"%d", newValue] showOverlay:FALSE];
+    [self sendCommand:@"brightness"
+            withValue:[NSString stringWithFormat:@"%d", newValue]
+            andParams:nil
+            andColors:nil
+          showOverlay:FALSE];
 }
 
 - (void) saveWithName:(NSString*)name
@@ -97,20 +107,47 @@
     return (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
-- (void) sendCommand:(NSString*)command withValue:(id)value
-{
-    [self sendCommand:command withValue:value showOverlay:TRUE];
-}
-
-- (void) sendCommand:(NSString*)command withValue:(NSString*)value showOverlay:(BOOL)overlay
+- (void) sendCommand:(NSString*)command
+           withValue:(id)value
+           andParams:(NSArray*)params
+           andColors:(NSArray*)colors
+         showOverlay:(BOOL)overlay
 {
     [KTLoader showLoader:@"Working hard. Chill out dude"];
     
     if(value == nil) { value = @""; }
     
-    NSString *urlString = [NSString stringWithFormat:@"http://arduino.local/arduino/c/%@/v/%@/", command, value];
+    // animations: arduino/animation/<animationMode>/<animationDelay>/COLORS
+    NSString *urlString = [NSString stringWithFormat:@"http://arduino.local/arduino/%@", command];
+    
+    if(value != nil) {
+        urlString = [urlString stringByAppendingPathComponent:value];
+    }
+    
+    if(params != nil) {
+        for(NSString *param in params) {
+            urlString = [urlString stringByAppendingPathComponent:param];
+        }
+    }
+    
+    if(colors != nil) {
+        if(colors.count > 0) {
+            urlString = [urlString stringByAppendingString:@"/"];
+        }
+        
+        for(NSString *color in colors) {
+            urlString = [urlString stringByAppendingString:color];
+        }
+    }
     
     [self addLog:[NSString stringWithFormat:@"Making request: %@", urlString]];
+    
+//    NSLog(@"SUBSTR => %@", [urlString substringFromIndex:urlString.length-2]);
+//    if([[urlString substringFromIndex:urlString.length-2] isEqualToString:@"/"]) {
+//        urlString = [urlString substringToIndex:urlString.length-1];
+//    }
+    
+    NSLog(@"Making request => %@", urlString);
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
     [request setTimeoutInterval:30];
@@ -146,20 +183,48 @@
 
 - (IBAction) apply:(id)sender
 {
-    NSMutableString *colors = [NSMutableString stringWithString:@""];
+    NSMutableArray *colors = [NSMutableArray array];
     
     int found = 0;
     while(found < _previewTV.subviews.count) {
         for(UIView *v in _previewTV.subviews) {
             if(v.tag == found) {
-                [colors appendString:[v.backgroundColor hexValue]];
+                [colors addObject:[v.backgroundColor hexValue]];
                 ++found;
                 break;
             }
         }
     }
+    
+    Configuration *config = _previewTV.configuration;
 
-    [self sendCommand:@"standard" withValue:colors];
+    NSMutableArray *params = [NSMutableArray array];
+    if(config.animationMode != nil) {
+        if(config.animationMode.integerValue > 0) {
+            [params addObject:[NSString stringWithFormat:@"%d", config.animationMode.integerValue]];
+        }
+    }
+    
+    if(config.animationDelay != nil) {
+        if(config.animationDelay.integerValue > 0) {
+            [params addObject:[NSString stringWithFormat:@"%d", config.animationDelay.integerValue]];
+        }
+    }
+
+    if(config.animationSteps != nil) {
+        if(config.animationSteps.integerValue > 0) {
+            [params addObject:[NSString stringWithFormat:@"%d", config.animationSteps.integerValue]];
+        }
+    }
+    
+    NSString *cmd = (config.categoryType.integerValue == CategoryTypeAnimated) ? @"animated" : @"standard";
+
+    [self sendCommand:cmd
+            withValue:nil
+            andParams:params
+            andColors:colors
+          showOverlay:TRUE];
+    
     [self saveWithName:nil];
 }
 
@@ -362,7 +427,7 @@
     [KTLoader showLoader:@"Loading Status..."];
     
     
-    NSString *urlString = @"http://arduino.local/arduino/c/get/v/nothing/";
+    NSString *urlString = @"http://arduino.local/arduino/get";
     
     [self addLog:[NSString stringWithFormat:@"Making request: %@", urlString]];
     
@@ -372,6 +437,8 @@
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
                                
+                               NSLog(@"Data=> %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                               
                                if(connectionError == nil) {
                                    [KTLoader hideLoader];
                                    
@@ -379,6 +446,8 @@
                                                          JSONObjectWithData:data
                                                          options:0
                                                          error:nil];
+                                   
+                                   NSLog(@"Dict => %@", json);
                                                                       
                                    _powerSwitch.on = [[json objectForKey:@"power"] integerValue] == 1;
                                    _brightnessSlider.value = [[json objectForKey:@"brightness"] integerValue];

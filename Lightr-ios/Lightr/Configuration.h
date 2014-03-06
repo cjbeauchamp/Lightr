@@ -16,6 +16,9 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * configurationString;
 @property (nonatomic, retain) NSNumber * categoryType;
+@property (nonatomic, retain) NSNumber * animationDelay;
+@property (nonatomic, retain) NSNumber * animationSteps;
+@property (nonatomic, retain) NSNumber * animationMode;
 @property (nonatomic, retain) id colors;
 
 @end

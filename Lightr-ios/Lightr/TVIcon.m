@@ -53,10 +53,10 @@
 
 - (void) replaceColorAtIndex:(NSUInteger)ndx withColor:(UIColor*)color
 {
-    NSMutableArray *colors = [(NSArray*)_configuration.colors mutableCopy];
+    NSMutableArray *colors = [_currentColors mutableCopy];
 
     // iterate thru our string to get everything with the same config
-    NSString *ch = [_configuration.configurationString substringWithRange:NSMakeRange(ndx, 1)];
+    NSString *ch = [NSString stringWithFormat:@"%d", ndx];
     
     for(int i=0; i<_configuration.configurationString.length; i++) {
         NSString *testCh = [_configuration.configurationString substringWithRange:NSMakeRange(i, 1)];

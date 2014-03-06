@@ -117,35 +117,41 @@
             NSLog(@"Got Settings: %@", settings);
 
             NSMutableArray *colors = [NSMutableArray array];
+            NSMutableString *finalString = nil;
             
-            NSMutableString *finalString = [NSMutableString stringWithString:@""];
-            
-            // read the bottom line (backwards)
-            NSMutableString *reversed = [NSMutableString stringWithString:@""];
-            for(int i = ((NSString*)[configLines lastObject]).length-1; i>=0; i--) {
-                [reversed appendString:[[configLines lastObject] substringWithRange:NSMakeRange(i, 1)]];
+            if(configLines.count > 0) {
+
+                finalString = [NSMutableString stringWithString:@""];
+
+                // read the bottom line (backwards)
+                NSMutableString *reversed = [NSMutableString stringWithString:@""];
+                for(int i = ((NSString*)[configLines lastObject]).length-1; i>=0; i--) {
+                    [reversed appendString:[[configLines lastObject] substringWithRange:NSMakeRange(i, 1)]];
+                }
+                [finalString appendString:reversed];
+                
+                // read the left column (bottom to top)
+                for(int i=configLines.count-2; i>=0; i--) {
+                    NSString *line = [configLines objectAtIndex:i];
+                    [finalString appendString:[line substringToIndex:1]];
+                }
+                
+                // read the top line
+                [finalString appendString:[[configLines objectAtIndex:0] substringFromIndex:1]];
+                
+                // read the right column
+                for(int i=1; i<configLines.count-1; i++) {
+                    NSString *line = [configLines objectAtIndex:i];
+                    [finalString appendString:[line substringFromIndex:line.length-1]];
+                }
+                
+                for(int i=0; i<finalString.length; i++) {
+                    NSString *key = [finalString substringWithRange:NSMakeRange(i, 1)];
+                    [colors addObject:[[settings objectForKey:@"colors"] objectForKey:key]];
+                }
+
             }
-            [finalString appendString:reversed];
             
-            // read the left column (bottom to top)
-            for(int i=configLines.count-2; i>=0; i--) {
-                NSString *line = [configLines objectAtIndex:i];
-                [finalString appendString:[line substringToIndex:1]];
-            }
-            
-            // read the top line
-            [finalString appendString:[[configLines objectAtIndex:0] substringFromIndex:1]];
-            
-            // read the right column
-            for(int i=1; i<configLines.count-1; i++) {
-                NSString *line = [configLines objectAtIndex:i];
-                [finalString appendString:[line substringFromIndex:line.length-1]];
-            }
-            
-            for(int i=0; i<finalString.length; i++) {
-                NSString *key = [finalString substringWithRange:NSMakeRange(i, 1)];
-                [colors addObject:[[settings objectForKey:@"colors"] objectForKey:key]];
-            }
             
             NSEntityDescription *entity = [NSEntityDescription entityForName:@"Configuration" inManagedObjectContext:self.managedObjectContext];
             Configuration *newObj = (Configuration*)[NSEntityDescription insertNewObjectForEntityForName:[entity name] inManagedObjectContext:self.managedObjectContext];
@@ -156,7 +162,22 @@
             newObj.categoryType = [NSNumber numberWithInteger:[[settings objectForKey:@"category"] integerValue]];
             newObj.colors = colors;
             newObj.name = [settings objectForKey:@"name"];
-            newObj.configurationString = finalString;
+            
+            if([settings objectForKey:@"animationMode"]) {
+                newObj.animationMode = [NSNumber numberWithInteger:[[settings objectForKey:@"animationMode"] integerValue]];
+            }
+            
+            if([settings objectForKey:@"animationDelay"]) {
+                newObj.animationDelay = [NSNumber numberWithInteger:[[settings objectForKey:@"animationDelay"] integerValue]];
+            }
+            
+            if([settings objectForKey:@"animationSteps"]) {
+                newObj.animationSteps = [NSNumber numberWithInteger:[[settings objectForKey:@"animationSteps"] integerValue]];
+            }
+
+            if(finalString != nil) {
+                newObj.configurationString = finalString;
+            }
             
             // Save the context.
             NSError *error = nil;
